@@ -2,18 +2,23 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.use((req, res, next) => {
     if (req.isAuthenticated()) {
-        res.status(200).json({
-            ok: true,
-            data: req.user,
-        });
-    } else {
-        res.status(401).json({
-            ok: false,
-            error: "Not authenticated",
-        });
+        return next();
     }
+    res.status(401).json({
+        ok: false,
+        error: "Not authenticated",
+    });
 });
+
+router.get("/", (req, res) => {
+    res.status(200).json({
+        ok: true,
+        data: req.user,
+    });
+});
+
+router.patch("/", async (req, res) => {});
 
 export default router;
