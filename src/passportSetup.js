@@ -12,7 +12,7 @@ export default function passportSetup() {
             },
             async function (accessToken, refreshToken, profile, done) {
                 // Check if user has previously logged in with google
-                const user = await UserModel({ googleId: profile.id });
+                const user = await UserModel.findOne({ googleId: profile.id });
                 if (user) {
                     return done(null, user);
                 }
@@ -21,7 +21,7 @@ export default function passportSetup() {
                     googleId: profile.id,
                     firstname: profile.name.givenName,
                     lastname: profile.name.familyName,
-                    email: null,
+                    email: profile.emails[0].value,
                     password: null,
                     profilePicture: profile.photos[0].value,
                     bio: "",
