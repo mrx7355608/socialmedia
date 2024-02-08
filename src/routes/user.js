@@ -1,4 +1,5 @@
 import { Router } from "express";
+import UserModel from "../models/user.model.js";
 
 const router = Router();
 
@@ -19,6 +20,14 @@ router.get("/", (req, res) => {
     });
 });
 
-router.patch("/", async (req, res) => {});
+// TODO: add validations
+router.patch("/", async (req, res) => {
+    const changes = req.body;
+    const userID = req.user._id;
+    const updatedUser = await UserModel.findByIdAndUpdate(userID, changes, {
+        new: true,
+    });
+    return updatedUser;
+});
 
 export default router;
