@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
                 ref: "User",
             },
         ],
-        pendingRequests: [
+        pending_requests: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
