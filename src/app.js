@@ -8,6 +8,7 @@ import passport from "passport";
 import sessions from "express-session";
 import passportSetup from "./passportSetup.js";
 import authRouter from "./routes/auth.js";
+import userRouter from "./routes/user.js";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(passport.session());
 passportSetup();
 
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 app.use(catch404);
 app.use(globalErrorHandler);
