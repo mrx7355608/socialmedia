@@ -4,13 +4,20 @@ import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 const userSchema = new mongoose.Schema(
     {
+        googleId: String,
         firstname: String,
         lastname: String,
-        username: String,
+        email: String,
         password: String,
         bio: String,
-        profilePicture: String,
-        coverPicture: String,
+        profilePicture: {
+            type: String,
+            default: "/profile.jpg",
+        },
+        coverPicture: {
+            type: String,
+            default: "/cover.jpg",
+        },
         friends: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +34,7 @@ const userSchema = new mongoose.Schema(
     {
         timestamps: true,
         toJSON: { virtuals: true },
-    },
+    }
 );
 
 userSchema.pre("save", async function (next) {
