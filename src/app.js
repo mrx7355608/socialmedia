@@ -7,6 +7,7 @@ import { catch404, globalErrorHandler } from "./utils/errorHandlers.js";
 import passport from "passport";
 import sessions from "express-session";
 import passportSetup from "./passportSetup.js";
+import authRouter from "./routes/auth.js";
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 passportSetup();
+
+app.use("/auth", authRouter);
 
 app.use(catch404);
 app.use(globalErrorHandler);
