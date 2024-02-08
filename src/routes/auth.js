@@ -19,6 +19,7 @@ router.post("/logout", (req, res) => {
         if (err) {
             return next(err);
         }
+        // TODO: cookie is not being cleared in the browser fix it
         return res.status(200).json({ ok: true, data: null });
     });
 });
