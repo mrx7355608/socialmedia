@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 
 const userSchema = new mongoose.Schema(
     {
