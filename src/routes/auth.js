@@ -15,8 +15,12 @@ router.get(
     })
 );
 router.post("/logout", (req, res) => {
-    req.logout();
-    return res.status(200).json({ ok: true, data: null });
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        return res.status(200).json({ ok: true, data: null });
+    });
 });
 
 export default router;
