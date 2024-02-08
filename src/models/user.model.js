@@ -37,16 +37,6 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-userSchema.pre("save", async function (next) {
-    if (this.isNew || this.isModified("password")) {
-        const hashedPassword = await bcrypt.hash(this.password, 12);
-        this.password = hashedPassword;
-        next();
-    } else {
-        next();
-    }
-});
-
 userSchema.virtual("fullname").get(function () {
     const capitalizedFirstName = capitalizeFirstLetter(this.firstname);
     const capitalizedLastName = capitalizeFirstLetter(this.lastname);
