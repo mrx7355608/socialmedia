@@ -14,5 +14,9 @@ router.get(
         successRedirect: process.env.CLIENT_URL,
     })
 );
+router.post("/logout", (req, res) => {
+    req.logout();
+    return res.status(200).json({ ok: true, data: null });
+});
 
 export default router;
