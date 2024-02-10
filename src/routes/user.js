@@ -27,7 +27,10 @@ router.patch("/", async (req, res) => {
     const updatedUser = await UserModel.findByIdAndUpdate(userID, changes, {
         new: true,
     });
-    return updatedUser;
+    return res.status(200).json({
+        ok: true,
+        data: updatedUser,
+    });
 });
 
 export default router;
