@@ -56,9 +56,15 @@ router.post("/signup", async (req, res, next) => {
         };
         // TODO: remove sensitive fields from "newUser" object
         const newUser = await UserModel.create(userData);
-        return res.status(201).json({
-            ok: true,
-            data: newUser,
+        // Create session for newly created user
+        req.login(newUser, function (err) {
+            if (err) {
+                return next(err);
+            }
+            return res.status(201).json({
+                ok: true,
+                data: newUser,
+            });
         });
     } catch (err) {
         next(err);
