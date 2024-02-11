@@ -72,4 +72,22 @@ router.get("/search", async (req, res, next) => {
     }
 });
 
+// Returns ten random users from database
+// Used in signup completion step when user is asked to
+// send request to people he may know
+router.get("/random-users", async (req, res, next) => {
+    try {
+        // returns ten random people
+        const randomUsers = await UserModel.aggregate([
+            { $sample: { $size: 10 } },
+        ]);
+        return res.status(200).json({
+            ok: true,
+            data: randomUsers,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 export default router;
