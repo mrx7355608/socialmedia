@@ -18,9 +18,14 @@ router.post("/add/:id", async (req, res, next) => {
             throw new ApiError("Friend not found", 404);
         }
 
+        // Check if the request has been sent previously
+        if (followingUserExists.pending_requests.includes(followerID)) {
+            throw new ApiError("A request is already pending", 400);
+        }
+
         // Add follower in the pending requests of the following
         await UserModel.findByIdAndUpdate(followingID, {
-            pending_requests: { $push: followerID },
+            $push: { pending_requests: followerID },
         });
         return res.status(200).json({
             ok: true,
@@ -30,3 +35,5 @@ router.post("/add/:id", async (req, res, next) => {
         next(err);
     }
 });
+
+export default router;

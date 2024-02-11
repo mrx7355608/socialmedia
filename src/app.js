@@ -9,6 +9,7 @@ import sessions from "express-session";
 import passportSetup from "./passportSetup.js";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
+import friendsRouter from "./routes/friends.js";
 
 const app = express();
 
@@ -40,6 +41,7 @@ passportSetup();
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/friends", friendsRouter);
 
 app.use(catch404);
 app.use(globalErrorHandler);
