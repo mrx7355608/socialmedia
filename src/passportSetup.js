@@ -1,6 +1,9 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as LocalStrategy } from "passport-local";
 import UserModel from "./models/user.model.js";
+import validator from "validator";
+import { verifyString } from "./utils/hashAndVerify.js";
 
 export default function passportSetup() {
     passport.use(
@@ -33,6 +36,34 @@ export default function passportSetup() {
             }
         )
     );
+
+    passport.use(
+        new LocalStrategy(async function (email, password, done) {
+            if (validator.isEmail(email) === false) {
+                return done(null, false, {
+                    message: "Invalid email",
+                });
+            }
+            // Check if user exists
+            const user = await UserModel.findOne({ email });
+            if (user == null) {
+                return done(null, false, {
+                    message: "Incorrect email or password",
+                });
+            }
+
+            // Validate password
+            const isValidPassword = await verifyString(password, user.password);
+            if (isValidPassword === false) {
+                return done(null, false, {
+                    message: "Incorrect email or password",
+                });
+            }
+
+            return done(null, user);
+        })
+    );
+
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
