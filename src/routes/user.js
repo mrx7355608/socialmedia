@@ -1,6 +1,9 @@
 import { Router } from "express";
 import UserModel from "../models/user.model.js";
-import userUpdatesValidator from "../validators/user.validators.js";
+import {
+    searchQueryValidator,
+    userUpdatesValidator,
+} from "../validators/user.validators.js";
 
 const router = Router();
 
@@ -21,7 +24,6 @@ router.get("/", (req, res) => {
     });
 });
 
-// TODO: add validations
 router.patch("/", async (req, res, next) => {
     try {
         const changes = req.body;
@@ -35,6 +37,35 @@ router.patch("/", async (req, res, next) => {
         return res.status(200).json({
             ok: true,
             data: updatedUser,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get("/search", async (req, res, next) => {
+    try {
+        const { name } = req.query;
+        searchQueryValidator(name);
+
+        const [fname, lname] = name.split(" ");
+        const users = await UserModel.find({
+            $or: [
+                {
+                    firstname: {
+                        $regex: new RegExp(fname),
+                        $options: "i",
+                    },
+                    lastname: {
+                        $regex: new RegExp(lname),
+                        $options: "i",
+                    },
+                },
+            ],
+        });
+        return res.status(200).json({
+            ok: true,
+            data: users,
         });
     } catch (err) {
         next(err);

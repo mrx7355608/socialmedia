@@ -14,9 +14,24 @@ const userSchema = joi.object({
     }),
 });
 
-export default function userUpdatedValidator(changes) {
+const searchSchema = joi.string().required().messages({
+    "any.required": "Please enter a name to search",
+    "string.empty": "Please enter a name to search",
+    "string.base": "Name should be a text value",
+});
+
+function userUpdatesValidator(changes) {
     const { error } = userSchema.validate(changes);
     if (error) {
         throw new ApiError(error.message, 400);
     }
 }
+
+function searchQueryValidator(query) {
+    const { error } = searchSchema.validate(query);
+    if (error) {
+        throw new ApiError(error.message, 400);
+    }
+}
+
+export { userUpdatesValidator, searchQueryValidator };
