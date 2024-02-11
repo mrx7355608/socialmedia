@@ -1,5 +1,6 @@
 import { Router } from "express";
 import UserModel from "../models/user.model.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 import {
     searchQueryValidator,
     userUpdatesValidator,
@@ -7,16 +8,9 @@ import {
 
 const router = Router();
 
-router.use((req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.status(401).json({
-        ok: false,
-        error: "Not authenticated",
-    });
-});
+router.use(isAuthenticated);
 
+// TODO: remove sensitive fields from req.user object
 router.get("/", (req, res) => {
     res.status(200).json({
         ok: true,
