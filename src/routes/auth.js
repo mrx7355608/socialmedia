@@ -70,5 +70,24 @@ router.post("/signup", async (req, res, next) => {
         next(err);
     }
 });
+router.post("/login", async (req, res, next) => {
+    passport.authenticate("local", function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (user == false) {
+            return res.status(400).json({ ok: false, error: info.message });
+        }
+        req.login(user, function (err) {
+            if (err) {
+                return next(err);
+            }
+            return res.status(200).json({
+                ok: true,
+                data: user,
+            });
+        });
+    })(req, res, next);
+});
 
 export default router;
