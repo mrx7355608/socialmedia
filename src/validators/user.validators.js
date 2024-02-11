@@ -1,5 +1,5 @@
 import joi from "joi";
-import ApiError from "../utils/ApiError";
+import ApiError from "../utils/ApiError.js";
 
 const userSchema = joi.object({
     profilePicture: joi.string().messages({
