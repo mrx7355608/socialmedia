@@ -73,7 +73,7 @@ router.get("/random-users", async (req, res, next) => {
     try {
         // returns ten random people
         const randomUsers = await UserModel.aggregate([
-            { $sample: { $size: 10 } },
+            { $sample: { size: 10 } },
         ]);
         return res.status(200).json({
             ok: true,
