@@ -133,9 +133,13 @@ router.patch("/reject-request/:id", async (req, res, next) => {
         }
 
         // Update friend list of both users
-        const updatedUser = await UserModel.findByIdAndUpdate(userID, {
-            $pull: { pending_requests: requestID },
-        }).populate("pending_requests", "profilePicture firstname lastname");
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userID,
+            {
+                $pull: { pending_requests: requestID },
+            },
+            { new: true }
+        ).populate("pending_requests", "profilePicture firstname lastname");
         // return response
         return res.status(200).json({
             ok: true,
@@ -163,9 +167,13 @@ router.patch("/remove-friend/:id", async (req, res, next) => {
         }
 
         // Remove friend
-        const updatedUser = await UserModel.findByIdAndUpdate(userID, {
-            $pull: { friends: friendID },
-        }).populate("friends", "profilePicture firstname lastname");
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userID,
+            {
+                $pull: { friends: friendID },
+            },
+            { new: true }
+        ).populate("friends", "profilePicture firstname lastname");
         return res.status(200).json({
             ok: true,
             data: updatedUser.friends,
