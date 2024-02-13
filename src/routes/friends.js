@@ -96,17 +96,22 @@ router.patch("/accept-request/:id", async (req, res, next) => {
         }
 
         // Update friend list of both users
-        const updatedUser = await UserModel.findByIdAndUpdate(userID, {
-            $push: { friends: requestID },
-            $pull: { pending_requests: requestID },
-        });
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userID,
+            {
+                $push: { friends: requestID },
+                $pull: { pending_requests: requestID },
+            },
+            { new: true }
+        ).populate("pending_requests", "profilePicture firstname lastname");
+
         await UserModel.findByIdAndUpdate(requestID, {
             $push: { friends: userID },
-        }).populate("friends", "profilePicture firstname lastname");
+        });
         // return response
         return res.status(200).json({
             ok: true,
-            data: updatedUser.friends,
+            data: updatedUser.pending_requests,
         });
     } catch (err) {
         next(err);
