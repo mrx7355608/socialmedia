@@ -27,6 +27,23 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+// TIMELINE
+router.get("/timeline", async (req, res, next) => {
+    try {
+        // TODO: add pagination
+        const friendIDs = req.user.friends;
+        const posts = await PostModel.find({ author: { $in: friendIDs } }).sort(
+            "-createdAt"
+        );
+        return res.status(200).json({
+            ok: true,
+            data: posts,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 // CREATE NEW POST
 router.post("/", async (req, res, next) => {
     try {
