@@ -9,6 +9,7 @@ const router = Router();
 
 router.use(isAuthenticated);
 
+// GET POSTS OF CURRENT USER
 router.get("/", async (req, res, next) => {
     try {
         const posts = await PostModel.find(
@@ -26,6 +27,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+// CREATE NEW POST
 router.post("/", async (req, res, next) => {
     try {
         const { content } = req.body;
@@ -51,6 +53,7 @@ router.post("/", async (req, res, next) => {
     }
 });
 
+// UPDATE EXISTING POST
 router.patch("/:id", async (req, res, next) => {
     try {
         const postID = req.params.id;
@@ -94,6 +97,7 @@ router.patch("/:id", async (req, res, next) => {
     }
 });
 
+// DELETE EXISTING POST
 router.delete("/:id", async (req, res, next) => {
     try {
         const postID = req.params.id;
