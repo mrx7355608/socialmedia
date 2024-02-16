@@ -42,30 +42,38 @@ router.get("/pending-requests", async (req, res, next) => {
 // SEND FRIEND REQUEST
 router.post("/send-request/:id", async (req, res, next) => {
     try {
-        const followingID = req.params.id; // the user, to whome friend req is being sent
-        const followerID = String(req.user._id); // the user who is sending friend req
+        const friendID = req.params.id;
+        const userID = String(req.user._id);
 
         // Check if user is sending request to himself
-        if (followerID === followingID) {
+        if (userID === friendID) {
             throw new ApiError("You cannot send request to yourself", 400);
         }
         // Check if user exists
-        const followingUserExists = await UserModel.findById(followingID);
-        if (!followingUserExists) {
+        const friend = await UserModel.findById(friendID);
+        if (!friend) {
             throw new ApiError("Friend not found", 404);
         }
         // Check if the request has been sent previously
-        if (followingUserExists.pending_requests.includes(followerID)) {
+        if (friend.pending_requests.includes(userID)) {
             throw new ApiError("A request is already pending", 400);
         }
         // Check if user is already friends with him/her
-        if (followingUserExists.friends.includes(followerID)) {
+        if (friend.friends.includes(userID)) {
             throw new ApiError("You are already friends with the user", 400);
         }
+        // Check if the friend has already sent us the request
+        const userPendingRequests = req.user.pending_requests;
+        if (userPendingRequests.includes(friendID)) {
+            throw new ApiError(
+                "A request from the same user is already in your pending requests",
+                400
+            );
+        }
 
-        // Add follower in the pending requests of the following
-        await UserModel.findByIdAndUpdate(followingID, {
-            $push: { pending_requests: followerID },
+        // Add user in the pending requests of the friend
+        await UserModel.findByIdAndUpdate(friendID, {
+            $push: { pending_requests: userID },
         });
         return res.status(200).json({
             ok: true,
