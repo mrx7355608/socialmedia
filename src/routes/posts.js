@@ -32,9 +32,11 @@ router.get("/timeline", async (req, res, next) => {
     try {
         // TODO: add pagination
         const friendIDs = req.user.friends;
-        const posts = await PostModel.find({ author: { $in: friendIDs } }).sort(
-            "-createdAt"
-        );
+        const userID = req.user._id;
+        const authorIDs = [userID, ...friendIDs];
+        const posts = await PostModel.find({ author: { $in: authorIDs } })
+            .populate("author", "profilePicture firstname lastname")
+            .sort("-createdAt");
         return res.status(200).json({
             ok: true,
             data: posts,
