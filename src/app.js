@@ -11,6 +11,7 @@ import passportSetup from "./passportSetup.js";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
 import friendsRouter from "./routes/friends.js";
+import postsRouter from "./routes/posts.js";
 
 const app = express();
 
@@ -50,6 +51,7 @@ passportSetup();
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/friends", friendsRouter);
+app.use("/posts", postsRouter);
 
 app.use(catch404);
 app.use(globalErrorHandler);
