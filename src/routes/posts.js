@@ -1,6 +1,7 @@
 import { Router } from "express";
 import PostModel from "../models/post.model.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
+import postDataValidator from "../validators/posts.validator.js";
 
 const router = Router();
 
@@ -26,14 +27,19 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
     try {
         const { content } = req.body;
-        const data = {
+        // Validate post
+        postDataValidator(content);
+
+        // Create new post
+        const postDTO = {
             author: req.user._id,
             content: content,
             likes: [],
             comments: [],
         };
-        // TODO: validate post data
-        const newPost = await PostModel.create(data);
+        const newPost = await PostModel.create(postDTO);
+
+        // Return response
         return res.status(201).json({
             ok: true,
             data: newPost,
