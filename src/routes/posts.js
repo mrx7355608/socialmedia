@@ -117,7 +117,7 @@ router.delete("/:id", async (req, res, next) => {
         const userID = String(req.user._id);
         const postAuthorID = String(post.author);
         if (userID !== postAuthorID) {
-            throw new ApiError("Only the post author can edit", 403);
+            throw new ApiError("Only the post author can delete", 403);
         }
 
         // Delete the post
