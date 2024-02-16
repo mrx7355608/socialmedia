@@ -179,6 +179,10 @@ router.patch("/remove-friend/:id", async (req, res, next) => {
             },
             { new: true }
         ).populate("friends", "profilePicture firstname lastname");
+        await UserModel.findByIdAndUpdate(friendID, {
+            $pull: { friends: userID },
+        });
+
         return res.status(200).json({
             ok: true,
             data: updatedUser.friends,
