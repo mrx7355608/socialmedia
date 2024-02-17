@@ -4,6 +4,7 @@ import validatePost from "../middlewares/validatePost.js";
 
 const router = Router();
 
+// GET COMMENTS
 router.get("/:postID", validatePost, async (req, res, next) => {
     try {
         const { postID } = req.params;
@@ -19,10 +20,14 @@ router.get("/:postID", validatePost, async (req, res, next) => {
     }
 });
 
+// CREATE COMMENT
 router.post("/:postID", validatePost, async (req, res, next) => {
     try {
         const { postID } = req.params;
         const { text } = req.body;
+        // Validate comment
+        commentDataValidator(text);
+
         const newComment = await CommentsModel.create({
             author: req.user._id,
             text: text,
@@ -37,6 +42,7 @@ router.post("/:postID", validatePost, async (req, res, next) => {
     }
 });
 
+// EDIT COMMENT
 router.patch("/:commentID", async (req, res, next) => {
     try {
         const { commentID } = req.params;
@@ -57,6 +63,7 @@ router.patch("/:commentID", async (req, res, next) => {
     }
 });
 
+// DELETE COMMENT
 router.delete("/:commentID", async (req, res, next) => {
     try {
         const { commentID } = req.params;
