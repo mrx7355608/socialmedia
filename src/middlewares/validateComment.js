@@ -1,7 +1,11 @@
+import validator from "validator";
+import ApiError from "../utils/ApiError.js";
+import CommentsModel from "../models/comment.model.js";
+
 export default async function validateComment(req, res, next) {
     const { commentID } = req.params;
     // Validate comment id
-    if (validator.isMongoId(commentID)) {
+    if (validator.isMongoId(commentID) == false) {
         return next(new ApiError("Invalid comment id", 400));
     }
     // Check if comment exists

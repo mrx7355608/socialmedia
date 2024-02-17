@@ -3,6 +3,7 @@ import CommentsModel from "../models/comment.model.js";
 import validatePost from "../middlewares/validatePost.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import validateComment from "../middlewares/validateComment.js";
+import commentDataValidator from "../validators/comments.validator.js";
 
 const router = Router();
 
