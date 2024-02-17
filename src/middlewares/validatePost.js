@@ -13,7 +13,7 @@ export default async function validatePost(req, res, next) {
     // Check if post exists
     const post = await PostModel.findById(postID);
     if (post == null) {
-        next(new ApiError("Post not found", 404));
+        return next(new ApiError("Post not found", 404));
     }
 
     return next();

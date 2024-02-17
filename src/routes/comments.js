@@ -1,8 +1,12 @@
 import { Router } from "express";
 import CommentsModel from "../models/comment.model.js";
 import validatePost from "../middlewares/validatePost.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
+import validateComment from "../middlewares/validateComment.js";
 
 const router = Router();
+
+router.use(isAuthenticated);
 
 // GET COMMENTS
 router.get("/:postID", validatePost, async (req, res, next) => {
@@ -43,10 +47,14 @@ router.post("/:postID", validatePost, async (req, res, next) => {
 });
 
 // EDIT COMMENT
-router.patch("/:commentID", async (req, res, next) => {
+router.patch("/:commentID", validateComment, async (req, res, next) => {
     try {
         const { commentID } = req.params;
         const change = req.body.text;
+
+        // Validate new comment
+        commentDataValidator(change);
+
         const updatedComment = await CommentsModel.findByIdAndUpdate(
             commentID,
             {
@@ -64,7 +72,7 @@ router.patch("/:commentID", async (req, res, next) => {
 });
 
 // DELETE COMMENT
-router.delete("/:commentID", async (req, res, next) => {
+router.delete("/:commentID", validateComment, async (req, res, next) => {
     try {
         const { commentID } = req.params;
         await CommentsModel.findByIdAndDelete(commentID);
