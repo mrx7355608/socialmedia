@@ -61,11 +61,15 @@ router.post("/", async (req, res, next) => {
             comments: [],
         };
         const newPost = await PostModel.create(postDTO);
+        const populatedPost = await newPost.populate(
+            "author",
+            "profilePicture firstname lastname"
+        );
 
         // Return response
         return res.status(201).json({
             ok: true,
-            data: newPost,
+            data: populatedPost,
         });
     } catch (err) {
         next(err);
