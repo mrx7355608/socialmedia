@@ -1,9 +1,10 @@
 import { Router } from "express";
 import CommentsModel from "../models/comment.model.js";
+import validatePost from "../middlewares/validatePost.js";
 
 const router = Router();
 
-router.get("/:postID", async (req, res, next) => {
+router.get("/:postID", validatePost, async (req, res, next) => {
     try {
         const { postID } = req.params;
         const comments = await CommentsModel.find({ postID })
@@ -18,7 +19,7 @@ router.get("/:postID", async (req, res, next) => {
     }
 });
 
-router.post("/:postID", async (req, res, next) => {
+router.post("/:postID", validatePost, async (req, res, next) => {
     try {
         const { postID } = req.params;
         const { text } = req.body;
