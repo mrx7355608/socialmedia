@@ -1,16 +1,5 @@
 import mongoose from "mongoose";
 
-const commentsSchema = mongoose.Schema({
-    author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    },
-    text: {
-        type: String,
-        required: true,
-    },
-});
-
 const postSchema = new mongoose.Schema(
     {
         author: {
@@ -23,10 +12,6 @@ const postSchema = new mongoose.Schema(
         },
         likes: {
             type: [String],
-            default: [],
-        },
-        comments: {
-            type: [commentsSchema],
             default: [],
         },
     },
