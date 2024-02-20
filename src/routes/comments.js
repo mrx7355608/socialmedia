@@ -1,6 +1,6 @@
 import { Router } from "express";
 import CommentsModel from "../models/comment.model.js";
-import validatePost from "../middlewares/validatePost.js";
+import validatePostID from "../middlewares/validatePostID.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import validateComment from "../middlewares/validateComment.js";
 import commentDataValidator from "../validators/comments.validator.js";
@@ -10,7 +10,7 @@ const router = Router();
 router.use(isAuthenticated);
 
 // GET COMMENTS
-router.get("/:postID", validatePost, async (req, res, next) => {
+router.get("/:postID", validatePostID, async (req, res, next) => {
     try {
         const { postID } = req.params;
         const comments = await CommentsModel.find({ postID })
@@ -26,7 +26,7 @@ router.get("/:postID", validatePost, async (req, res, next) => {
 });
 
 // CREATE COMMENT
-router.post("/:postID", validatePost, async (req, res, next) => {
+router.post("/:postID", validatePostID, async (req, res, next) => {
     try {
         const { postID } = req.params;
         const { text } = req.body;
