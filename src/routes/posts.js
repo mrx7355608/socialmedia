@@ -78,9 +78,9 @@ router.post("/", async (req, res, next) => {
 });
 
 // UPDATE EXISTING POST
-router.patch("/:id", validatePostID, async (req, res, next) => {
+router.patch("/:postID", validatePostID, async (req, res, next) => {
     try {
-        const postID = req.params.id;
+        const postID = req.params.postID;
 
         // Verify that post belongs to the user
         const userID = String(req.user._id);
@@ -111,7 +111,7 @@ router.patch("/:id", validatePostID, async (req, res, next) => {
 });
 
 // DELETE EXISTING POST
-router.delete("/:id", validatePostID, async (req, res, next) => {
+router.delete("/:postID", validatePostID, async (req, res, next) => {
     try {
         const postID = req.params.id;
 
@@ -135,49 +135,48 @@ router.delete("/:id", validatePostID, async (req, res, next) => {
     }
 });
 
-
-router.patch("/like/:id", validatePostID, async (req, res, next) => {
+router.patch("/like/:postID", validatePostID, async (req, res, next) => {
     try {
         const userID = String(req.user._id);
         const post = req.post;
 
         if (post.likes.includes(userID)) {
-            throw new ApiError("You have already liked this post", 400)
+            throw new ApiError("You have already liked this post", 400);
         }
 
         await PostModel.findByIdAndUpdate(post._id, {
-            $push: { likes: userID }
-        })
+            $push: { likes: userID },
+        });
 
         return res.status(200).json({
             ok: true,
-            data: null
-        })
+            data: null,
+        });
     } catch (err) {
         next(err);
     }
-})
+});
 
-router.patch("/dislike/:id", validatePostID, async (req, res, next) => {
+router.patch("/dislike/:postID", validatePostID, async (req, res, next) => {
     try {
         const userID = String(req.user._id);
         const post = req.post;
 
         if (post.likes.includes(userID) === false) {
-            throw new ApiError("You have not liked this post yet", 400)
+            throw new ApiError("You have not liked this post yet", 400);
         }
 
         await PostModel.findByIdAndUpdate(post._id, {
-            $pull: { likes: userID }
-        })
+            $pull: { likes: userID },
+        });
 
         return res.status(200).json({
             ok: true,
-            data: null
-        })
+            data: null,
+        });
     } catch (err) {
         next(err);
     }
-})
+});
 
 export default router;
