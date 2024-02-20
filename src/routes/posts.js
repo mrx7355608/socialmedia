@@ -4,6 +4,7 @@ import isAuthenticated from "../middlewares/isAuthenticated.js";
 import postDataValidator from "../validators/posts.validator.js";
 import validator from "validator";
 import ApiError from "../utils/ApiError.js";
+import validatePostID from "../middlewares/validatePostID.js";
 
 const router = Router();
 
@@ -77,24 +78,13 @@ router.post("/", async (req, res, next) => {
 });
 
 // UPDATE EXISTING POST
-router.patch("/:id", async (req, res, next) => {
+router.patch("/:id", validatePostID, async (req, res, next) => {
     try {
         const postID = req.params.id;
 
-        // Validate post id
-        if (validator.isMongoId(postID) === false) {
-            throw new ApiError("Invalid post id", 400);
-        }
-
-        // Check if post exists
-        const post = await PostModel.findById(postID);
-        if (post === null) {
-            throw new ApiError("Post not found", 404);
-        }
-
         // Verify that post belongs to the user
         const userID = String(req.user._id);
-        const postAuthorID = String(post.author);
+        const postAuthorID = String(req.post.author);
         if (userID !== postAuthorID) {
             throw new ApiError("Only the post author can edit", 403);
         }
@@ -121,24 +111,13 @@ router.patch("/:id", async (req, res, next) => {
 });
 
 // DELETE EXISTING POST
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", validatePostID, async (req, res, next) => {
     try {
         const postID = req.params.id;
 
-        // Validate post id
-        if (validator.isMongoId(postID) === false) {
-            throw new ApiError("Invalid post id", 400);
-        }
-
-        // Check if post exists
-        const post = await PostModel.findById(postID);
-        if (post === null) {
-            throw new ApiError("Post not found", 404);
-        }
-
         // Verify that post belongs to the user
         const userID = String(req.user._id);
-        const postAuthorID = String(post.author);
+        const postAuthorID = String(req.post.author);
         if (userID !== postAuthorID) {
             throw new ApiError("Only the post author can delete", 403);
         }
@@ -155,5 +134,50 @@ router.delete("/:id", async (req, res, next) => {
         next(err);
     }
 });
+
+
+router.patch("/like/:id", validatePostID, async (req, res, next) => {
+    try {
+        const userID = String(req.user._id);
+        const post = req.post;
+
+        if (post.likes.includes(userID)) {
+            throw new ApiError("You have already liked this post", 400)
+        }
+
+        await PostModel.findByIdAndUpdate(post._id, {
+            $push: { likes: userID }
+        })
+
+        return res.status(200).json({
+            ok: true,
+            data: null
+        })
+    } catch (err) {
+        next(err);
+    }
+})
+
+router.patch("/dislike/:id", validatePostID, async (req, res, next) => {
+    try {
+        const userID = String(req.user._id);
+        const post = req.post;
+
+        if (post.likes.includes(userID) === false) {
+            throw new ApiError("You have not liked this post yet", 400)
+        }
+
+        await PostModel.findByIdAndUpdate(post._id, {
+            $pull: { likes: userID }
+        })
+
+        return res.status(200).json({
+            ok: true,
+            data: null
+        })
+    } catch (err) {
+        next(err);
+    }
+})
 
 export default router;
