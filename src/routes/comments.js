@@ -38,9 +38,14 @@ router.post("/:postID", validatePost, async (req, res, next) => {
             text: text,
             postID: postID,
         });
+        const populatedComment = await newComment.populate(
+            "author",
+            "profilePicture firstname lastname"
+        );
+
         return res.status(201).json({
             ok: true,
-            data: newComment,
+            data: populatedComment,
         });
     } catch (err) {
         next(err);
