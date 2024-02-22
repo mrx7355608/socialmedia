@@ -145,9 +145,13 @@ router.patch("/like/:postID", validatePostID, async (req, res, next) => {
             throw new ApiError("You have already liked this post", 400);
         }
 
-        const updatedPost = await PostModel.findByIdAndUpdate(post._id, {
-            $push: { likes: userID },
-        });
+        const updatedPost = await PostModel.findByIdAndUpdate(
+            post._id,
+            {
+                $push: { likes: userID },
+            },
+            { new: true }
+        );
 
         return res.status(200).json({
             ok: true,
@@ -168,9 +172,13 @@ router.patch("/dislike/:postID", validatePostID, async (req, res, next) => {
             throw new ApiError("You have not liked this post yet", 400);
         }
 
-        const updatedPost = await PostModel.findByIdAndUpdate(post._id, {
-            $pull: { likes: userID },
-        });
+        const updatedPost = await PostModel.findByIdAndUpdate(
+            post._id,
+            {
+                $pull: { likes: userID },
+            },
+            { new: true }
+        );
 
         return res.status(200).json({
             ok: true,
