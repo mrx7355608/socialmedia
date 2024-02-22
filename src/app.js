@@ -51,7 +51,6 @@ const mongoStore = new MongoStore({
     collection: "sessions",
 });
 
-console.log(process.env.SESSIONS_SECRET);
 app.use(
     sessions({
         secret: process.env.SESSIONS_SECRET,

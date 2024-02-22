@@ -54,8 +54,14 @@ router.post("/signup", async (req, res, next) => {
             pending_requests: [],
             googleId: null,
         };
-        // TODO: remove sensitive fields from "newUser" object
         const newUser = await UserModel.create(userData);
+
+        // Removing sensitive fields from user object
+        delete newUser.password;
+        delete newUser.__v;
+        delete newUser.googleId;
+        delete newUser.email;
+
         // Create session for newly created user
         req.login(newUser, function (err) {
             if (err) {

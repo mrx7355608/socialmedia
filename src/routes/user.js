@@ -12,9 +12,16 @@ router.use(isAuthenticated);
 
 // TODO: remove sensitive fields from req.user object
 router.get("/", (req, res) => {
+    const user = req.user;
+    // Removed sensitive fields from user object
+    delete user.password;
+    delete user.__v;
+    delete user.googleId;
+    delete user.email;
+
     res.status(200).json({
         ok: true,
-        data: req.user,
+        data: user,
     });
 });
 
