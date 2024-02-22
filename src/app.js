@@ -33,7 +33,7 @@ app.use(
     })
 );
 app.use(hpp());
-app.use(morgan("dev"));
+app.use(morgan("common"));
 app.use(
     cors({
         origin: process.env.CLIENT_URL,
@@ -50,16 +50,20 @@ const mongoStore = new MongoStore({
     uri: process.env.DB_URL,
     collection: "sessions",
 });
+
+console.log(process.env.SESSIONS_SECRET);
 app.use(
     sessions({
         secret: process.env.SESSIONS_SECRET,
         resave: false,
         saveUninitialized: false,
+        proxy: true,
+        name: "sid",
         cookie: {
             maxAge: 24 * 3600 * 1000,
             secure: true,
-            domain: process.env.SERVER_DOMAIN,
-            path: "/",
+            httpOnly: true,
+            sameSite: "none",
         },
         store: mongoStore,
     })
