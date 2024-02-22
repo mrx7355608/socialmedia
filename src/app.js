@@ -19,6 +19,14 @@ import { __dirname } from "./utils/dirName.js";
 const app = express();
 
 app.use(helmet());
+app.use(
+    helmet.contentSecurityPolicy({
+        useDefaults: true,
+        directives: {
+            "img-src": ["'self'", "https://res.cloudinary.com/", "data:"],
+        },
+    })
+);
 app.use(hpp());
 app.use(morgan("dev"));
 app.use(
