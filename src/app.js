@@ -49,11 +49,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportSetup();
 
-app.use("/auth", authRouter);
-app.use("/user", userRouter);
-app.use("/friends", friendsRouter);
-app.use("/posts", postsRouter);
-app.use("/comments", commentsRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/friends", friendsRouter);
+app.use("/api/v1/posts", postsRouter);
+app.use("/api/v1/comments", commentsRouter);
 
 app.use(catch404);
 app.use(globalErrorHandler);
