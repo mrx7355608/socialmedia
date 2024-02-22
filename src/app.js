@@ -13,6 +13,8 @@ import userRouter from "./routes/user.js";
 import friendsRouter from "./routes/friends.js";
 import postsRouter from "./routes/posts.js";
 import commentsRouter from "./routes/comments.js";
+import path from "path";
+import { __dirname } from "./utils/dirName.js";
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// Serve react app
+app.use(express.static(path.join(__dirname, "..", "..", "dist")));
 
 const MongoStore = connectMongo(sessions);
 const mongoStore = new MongoStore({
@@ -54,6 +58,10 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/friends", friendsRouter);
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/comments", commentsRouter);
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "..", "dist", "index.html"));
+});
 
 app.use(catch404);
 app.use(globalErrorHandler);
