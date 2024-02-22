@@ -58,6 +58,8 @@ app.use(
         cookie: {
             maxAge: 24 * 3600 * 1000,
             secure: true,
+            domain: process.env.SERVER_DOMAIN,
+            path: "/",
         },
         store: mongoStore,
     })
