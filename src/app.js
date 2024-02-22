@@ -23,7 +23,12 @@ app.use(
     helmet.contentSecurityPolicy({
         useDefaults: true,
         directives: {
-            "img-src": ["'self'", "https://res.cloudinary.com/", "data:"],
+            "img-src": [
+                "'self'",
+                "https://res.cloudinary.com/",
+                "data:",
+                "https://lh3.googleusercontent.com/",
+            ],
         },
     })
 );
