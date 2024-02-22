@@ -11,11 +11,11 @@ const userSchema = new mongoose.Schema(
         bio: String,
         profilePicture: {
             type: String,
-            default: "/profile.jpg",
+            default: process.env.DEFAULT_PROFILE_PICTURE,
         },
         coverPicture: {
             type: String,
-            default: "/cover.jpg",
+            default: process.env.DEFAULT_COVER_PICTURE,
         },
         friends: [
             {
