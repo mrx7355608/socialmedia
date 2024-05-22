@@ -5,8 +5,8 @@ const morgan = require("morgan");
 const express = require("express");
 const passport = require("passport");
 const sessions = require("express-session");
-const MongoStore = require("connect-mongo");
-const { default: mongoose } = require("mongoose");
+// const MongoStore = require("connect-mongo");
+// const { default: mongoose } = require("mongoose");
 const passportSetup = require("./passportSetup.js");
 
 const authRouter = require("./routes/auth.js");
