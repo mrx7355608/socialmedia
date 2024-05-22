@@ -1,18 +1,20 @@
-const express = require("express");
+const hpp = require("hpp");
 const cors = require("cors");
 const helmet = require("helmet");
-const hpp = require("hpp");
 const morgan = require("morgan");
-const { catch404, globalErrorHandler } = require("./utils/errorHandlers.js");
+const express = require("express");
 const passport = require("passport");
 const sessions = require("express-session");
-const connectMongo = require("connect-mongodb-session");
+const MongoStore = require("connect-mongo");
+const { default: mongoose } = require("mongoose");
 const passportSetup = require("./passportSetup.js");
+
 const authRouter = require("./routes/auth.js");
 const userRouter = require("./routes/user.js");
-const friendsRouter = require("./routes/friends.js");
 const postsRouter = require("./routes/posts.js");
+const friendsRouter = require("./routes/friends.js");
 const commentsRouter = require("./routes/comments.js");
+const { catch404, globalErrorHandler } = require("./utils/errorHandlers.js");
 
 const app = express();
 
@@ -41,12 +43,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const MongoStore = connectMongo(sessions);
-const mongoStore = new MongoStore({
-    uri: process.env.DB_URL,
-    collection: "sessions",
-});
-
 app.use(
     sessions({
         secret: process.env.SESSIONS_SECRET,
@@ -58,7 +54,10 @@ app.use(
             secure: false,
             httpOnly: true,
         },
-        store: mongoStore,
+        store: MongoStore.create({
+            client: mongoose.connection.getClient(),
+            collectionName: "sessions",
+        }),
     })
 );
 app.use(passport.initialize());
