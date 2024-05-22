@@ -54,10 +54,10 @@ app.use(
             secure: false,
             httpOnly: true,
         },
-        store: MongoStore.create({
-            client: mongoose.connection.getClient(),
-            collectionName: "sessions",
-        }),
+        // store: MongoStore.create({
+        //     client: mongoose.connection.getClient(),
+        //     collectionName: "sessions",
+        // }),
     })
 );
 app.use(passport.initialize());
