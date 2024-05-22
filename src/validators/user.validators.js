@@ -1,5 +1,5 @@
-import joi from "joi";
-import ApiError from "../utils/ApiError.js";
+const joi = require("joi");
+const ApiError = require("../utils/ApiError.js");
 
 const userSchema = joi.object({
     profilePicture: joi.string().messages({
@@ -34,4 +34,4 @@ function searchQueryValidator(query) {
     }
 }
 
-export { userUpdatesValidator, searchQueryValidator };
+module.exports = { userUpdatesValidator, searchQueryValidator };

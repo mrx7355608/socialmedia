@@ -1,10 +1,10 @@
-import { Router } from "express";
-import UserModel from "../models/user.model.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-import {
+const { Router } = require("express");
+const UserModel = require("../models/user.model.js");
+const isAuthenticated = require("../middlewares/isAuthenticated.js");
+const {
     searchQueryValidator,
     userUpdatesValidator,
-} from "../validators/user.validators.js";
+} = require("../validators/user.validators.js");
 
 const router = Router();
 
@@ -91,4 +91,4 @@ router.get("/random-users", async (req, res, next) => {
     }
 });
 
-export default router;
+module.exports = router;

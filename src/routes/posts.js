@@ -1,9 +1,9 @@
-import { Router } from "express";
-import PostModel from "../models/post.model.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-import postDataValidator from "../validators/posts.validator.js";
-import ApiError from "../utils/ApiError.js";
-import validatePostID from "../middlewares/validatePostID.js";
+const { Router } = require("express");
+const PostModel = require("../models/post.model.js");
+const isAuthenticated = require("../middlewares/isAuthenticated.js");
+const postDataValidator = require("../validators/posts.validator.js");
+const ApiError = require("../utils/ApiError.js");
+const validatePostID = require("../middlewares/validatePostID.js");
 
 const router = Router();
 
@@ -190,4 +190,4 @@ router.patch("/dislike/:postID", validatePostID, async (req, res, next) => {
     }
 });
 
-export default router;
+module.exports = router;

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import CommentsModel from "../models/comment.model.js";
-import validatePostID from "../middlewares/validatePostID.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-import validateComment from "../middlewares/validateComment.js";
-import commentDataValidator from "../validators/comments.validator.js";
+const { Router } = require("express");
+const CommentsModel = require("../models/comment.model.js");
+const validatePostID = require("../middlewares/validatePostID.js");
+const isAuthenticated = require("../middlewares/isAuthenticated.js");
+const validateComment = require("../middlewares/validateComment.js");
+const commentDataValidator = require("../validators/comments.validator.js");
 
 const router = Router();
 
@@ -88,4 +88,4 @@ router.delete("/:commentID", validateComment, async (req, res, next) => {
     }
 });
 
-export default router;
+module.exports = router;

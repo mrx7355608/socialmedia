@@ -1,4 +1,4 @@
-import ApiError from "./ApiError.js";
+const ApiError = require("./ApiError.js");
 
 function catch404(req, res, next) {
     return next(new ApiError("Page not found", 404));
@@ -22,4 +22,4 @@ function globalErrorHandler(err, req, res, next) {
     }
 }
 
-export { catch404, globalErrorHandler };
+module.exports = { catch404, globalErrorHandler };

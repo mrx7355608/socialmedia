@@ -1,20 +1,18 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import hpp from "hpp";
-import morgan from "morgan";
-import { catch404, globalErrorHandler } from "./utils/errorHandlers.js";
-import passport from "passport";
-import sessions from "express-session";
-import connectMongo from "connect-mongodb-session";
-import passportSetup from "./passportSetup.js";
-import authRouter from "./routes/auth.js";
-import userRouter from "./routes/user.js";
-import friendsRouter from "./routes/friends.js";
-import postsRouter from "./routes/posts.js";
-import commentsRouter from "./routes/comments.js";
-import path from "path";
-import { __dirname } from "./utils/dirName.js";
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const morgan = require("morgan");
+const { catch404, globalErrorHandler } = require("./utils/errorHandlers.js");
+const passport = require("passport");
+const sessions = require("express-session");
+const connectMongo = require("connect-mongodb-session");
+const passportSetup = require("./passportSetup.js");
+const authRouter = require("./routes/auth.js");
+const userRouter = require("./routes/user.js");
+const friendsRouter = require("./routes/friends.js");
+const postsRouter = require("./routes/posts.js");
+const commentsRouter = require("./routes/comments.js");
 
 const app = express();
 
@@ -30,7 +28,7 @@ app.use(
                 "https://lh3.googleusercontent.com/",
             ],
         },
-    }),
+    })
 );
 app.use(hpp());
 app.use(morgan("common"));
@@ -38,12 +36,10 @@ app.use(
     cors({
         origin: process.env.CLIENT_URL,
         credentials: true,
-    }),
+    })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// Serve react app
-app.use(express.static(path.join(__dirname, "..", "..", "dist")));
 
 const MongoStore = connectMongo(sessions);
 const mongoStore = new MongoStore({
@@ -63,7 +59,7 @@ app.use(
             httpOnly: true,
         },
         store: mongoStore,
-    }),
+    })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -75,11 +71,7 @@ app.use("/api/v1/friends", friendsRouter);
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/comments", commentsRouter);
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "..", "dist", "index.html"));
-});
-
 app.use(catch404);
 app.use(globalErrorHandler);
 
-export default app;
+module.exports = app;

@@ -1,8 +1,9 @@
-import validator from "validator";
-import ApiError from "../utils/ApiError.js";
-import CommentsModel from "../models/comment.model.js";
+const validator = require("validator");
+const ApiError = require("../utils/ApiError.js");
+const CommentsModel = require("../models/comment.model.js");
+const { commentDataValidator } = require("../validators/comments.validator.js");
 
-export default async function validateComment(req, res, next) {
+async function validateComment(req, res, next) {
     const { commentID } = req.params;
     // Validate comment id
     if (validator.isMongoId(commentID) == false) {
@@ -24,3 +25,5 @@ export default async function validateComment(req, res, next) {
 
     return next();
 }
+
+module.exports = commentDataValidator;

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+const mongoose = require("mongoose");
+const capitalizeFirstLetter = require("../utils/capitalizeFirstLetter.js");
 
 const userSchema = new mongoose.Schema(
     {
@@ -44,4 +44,4 @@ userSchema.virtual("fullname").get(function () {
 });
 
 const UserModel = mongoose.model("User", userSchema);
-export default UserModel;
+module.exports = UserModel;

@@ -1,11 +1,11 @@
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as LocalStrategy } from "passport-local";
-import UserModel from "./models/user.model.js";
-import validator from "validator";
-import { verifyString } from "./utils/hashAndVerify.js";
+const passport = require("passport");
+const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
+const { Strategy: LocalStrategy } = require("passport-local");
+const UserModel = require("./models/user.model");
+const validator = require("validator");
+const { verifyString } = require("./utils/hashAndVerify");
 
-export default function passportSetup() {
+function passportSetup() {
     passport.use(
         new GoogleStrategy(
             {
@@ -80,3 +80,5 @@ export default function passportSetup() {
         }
     });
 }
+
+module.exports = passportSetup;

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import passport from "passport";
-import { validateSignupData } from "../validators/auth.validators.js";
-import UserModel from "../models/user.model.js";
-import ApiError from "../utils/ApiError.js";
-import { hashString } from "../utils/hashAndVerify.js";
+const { Router } = require("express");
+const passport = require("passport");
+const { validateSignupData } = require("../validators/auth.validators.js");
+const UserModel = require("../models/user.model.js");
+const ApiError = require("../utils/ApiError.js");
+const { hashString } = require("../utils/hashAndVerify.js");
 
 const router = Router();
 
@@ -96,4 +96,4 @@ router.post("/login", async (req, res, next) => {
     })(req, res, next);
 });
 
-export default router;
+module.exports = router;

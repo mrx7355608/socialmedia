@@ -1,8 +1,8 @@
-import validator from "validator";
-import PostModel from "../models/post.model.js";
-import ApiError from "../utils/ApiError.js";
+const validator = require("validator");
+const PostModel = require("../models/post.model.js");
+const ApiError = require("../utils/ApiError.js");
 
-export default async function validatePostID(req, res, next) {
+async function validatePostID(req, res, next) {
     const { postID } = req.params;
 
     // Validate post id
@@ -19,3 +19,4 @@ export default async function validatePostID(req, res, next) {
     req.post = post;
     return next();
 }
+module.exports = validatePostID;

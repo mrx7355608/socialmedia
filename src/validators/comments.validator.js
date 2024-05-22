@@ -1,5 +1,5 @@
-import joi from "joi";
-import ApiError from "../utils/ApiError.js";
+const joi = require("joi");
+const ApiError = require("../utils/ApiError.js");
 
 const commentsValidationSchema = joi
     .string()
@@ -14,9 +14,10 @@ const commentsValidationSchema = joi
         "string.base": "Invalid comment",
     });
 
-export default function commentDataValidator(string) {
+function commentDataValidator(string) {
     const { error } = commentsValidationSchema.validate(string);
     if (error) {
         throw new ApiError(error.message, 400);
     }
 }
+module.exports = { commentDataValidator };

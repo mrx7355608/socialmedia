@@ -1,8 +1,8 @@
-import { Router } from "express";
-import UserModel from "../models/user.model.js";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-import ApiError from "../utils/ApiError.js";
-import validator from "validator";
+const { Router } = require("express");
+const UserModel = require("../models/user.model.js");
+const isAuthenticated = require("../middlewares/isAuthenticated.js");
+const ApiError = require("../utils/ApiError.js");
+const validator = require("validator");
 
 const router = Router();
 
@@ -200,4 +200,4 @@ router.patch("/remove-friend/:id", async (req, res, next) => {
     }
 });
 
-export default router;
+module.exports = router;

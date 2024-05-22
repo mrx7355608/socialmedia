@@ -1,5 +1,5 @@
-import joi from "joi";
-import ApiError from "../utils/ApiError.js";
+const joi = require("joi");
+const ApiError = require("../utils/ApiError.js");
 
 const signupSchema = joi.object({
     firstname: joi.string().required().min(3).max(15).messages({
@@ -40,9 +40,11 @@ const signupSchema = joi.object({
         }),
 });
 
-export function validateSignupData(data) {
+function validateSignupData(data) {
     const { error } = signupSchema.validate(data);
     if (error) {
         throw new ApiError(error.message, 400);
     }
 }
+
+module.exports = { validateSignupData };
