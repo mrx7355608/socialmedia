@@ -30,7 +30,7 @@ app.use(
                 "https://lh3.googleusercontent.com/",
             ],
         },
-    })
+    }),
 );
 app.use(hpp());
 app.use(morgan("common"));
@@ -38,7 +38,7 @@ app.use(
     cors({
         origin: process.env.CLIENT_URL,
         credentials: true,
-    })
+    }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,16 +56,14 @@ app.use(
         secret: process.env.SESSIONS_SECRET,
         resave: false,
         saveUninitialized: false,
-        proxy: true,
         name: "sid",
         cookie: {
             maxAge: 24 * 3600 * 1000,
-            secure: true,
+            secure: false,
             httpOnly: true,
-            sameSite: "none",
         },
         store: mongoStore,
-    })
+    }),
 );
 app.use(passport.initialize());
 app.use(passport.session());

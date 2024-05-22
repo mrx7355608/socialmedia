@@ -2,7 +2,6 @@ import { Router } from "express";
 import PostModel from "../models/post.model.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import postDataValidator from "../validators/posts.validator.js";
-import validator from "validator";
 import ApiError from "../utils/ApiError.js";
 import validatePostID from "../middlewares/validatePostID.js";
 
@@ -18,7 +17,9 @@ router.get("/", async (req, res, next) => {
                 author: String(req.user._id),
             },
             "-__v"
-        ).sort("-createdAt");
+        )
+            .sort("-createdAt")
+            .populate("author", "fullname profilePicture");
         return res.status(200).json({
             ok: true,
             data: posts,
