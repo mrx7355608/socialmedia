@@ -15,6 +15,7 @@ const postsRouter = require("./routes/posts.js");
 const friendsRouter = require("./routes/friends.js");
 const commentsRouter = require("./routes/comments.js");
 const { catch404, globalErrorHandler } = require("./utils/errorHandlers.js");
+const { disconnectDB, connectDB } = require("./utils/db.js");
 
 const app = express();
 
@@ -30,15 +31,23 @@ app.use(
                 "https://lh3.googleusercontent.com/",
             ],
         },
-    })
+    }),
 );
 app.use(hpp());
 app.use(morgan("common"));
+app.use((req, res, next) => {
+    console.log("Connection status: ", mongoose.connection.readyState);
+    // if (mongoose.connection.readyState === 0) {
+    //     connectDB(process.env.DB_URL);
+    // }
+    next();
+    // disconnectDB();
+});
 app.use(
     cors({
         origin: process.env.CLIENT_URL,
         credentials: true,
-    })
+    }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -50,14 +59,14 @@ app.use(
         name: "sid",
         cookie: {
             maxAge: 24 * 3600 * 1000,
-            secure: false,
+            secure: process.env.NODE_ENV === "production",
             httpOnly: true,
         },
         store: MongoStore.create({
             client: mongoose.connection.getClient(),
             collectionName: "sessions",
         }),
-    })
+    }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
