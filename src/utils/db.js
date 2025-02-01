@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 async function connectDB(url) {
-    await mongoose.connect(url);
+    await mongoose.connect(url, {
+        maxPoolSize: 1,
+        minPoolSize: 1,
+        socketTimeoutMS: 3000,
+    });
     console.log("Connected to database");
 }
 
